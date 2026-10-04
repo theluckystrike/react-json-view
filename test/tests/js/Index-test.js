@@ -170,4 +170,49 @@ describe('<Index />', function () {
     // Check that commas are present by default
     expect(wrapper.text()).to.include(',')
   })
+
+  describe('rejected edits', function () {
+    const edit = (wrapper, row, value) => {
+      wrapper.find('.click-to-edit-icon').hostNodes().at(row).simulate('click')
+      wrapper
+        .find('.variable-editor')
+        .hostNodes()
+        .simulate('change', { target: { value } })
+      wrapper.find('.edit-check.string-value').hostNodes().simulate('click')
+    }
+
+    it('can be retried after a validation failure', function () {
+      const onEdit = sinon.stub().returns(false)
+      const wrapper = mount(
+        <Index src={{ list: [{ name: 'a' }] }} onEdit={onEdit} />
+      )
+
+      edit(wrapper, 0, 'b')
+      edit(wrapper, 0, 'c')
+
+      expect(onEdit.calledTwice).to.equal(true)
+      expect(onEdit.secondCall.args[0].namespace).to.deep.equal(['list', '0'])
+      expect(onEdit.secondCall.args[0].updated_src).to.deep.equal({
+        list: [{ name: 'c' }]
+      })
+      expect(wrapper.find('.validation-failure').hostNodes()).to.have.length(1)
+    })
+
+    it('are not applied by the next accepted edit', function () {
+      const onEdit = sinon.stub()
+      onEdit.onFirstCall().returns(false)
+      onEdit.onSecondCall().returns(true)
+      const wrapper = mount(
+        <Index src={{ first: 'a', second: 'b' }} onEdit={onEdit} />
+      )
+
+      edit(wrapper, 0, 'x')
+      edit(wrapper, 1, 'y')
+
+      expect(onEdit.secondCall.args[0].updated_src).to.deep.equal({
+        first: 'a',
+        second: 'y'
+      })
+    })
+  })
 })

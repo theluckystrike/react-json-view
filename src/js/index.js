@@ -247,6 +247,8 @@ class ReactJsonView extends React.PureComponent {
         src: updatedSrc
       })
     } else {
+      // updateSrc() already stored the rejected src, so restore it
+      ObjectAttributes.set(this.rjvId, 'global', 'src', src)
       this.setState({
         validationFailure: true
       })

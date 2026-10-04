@@ -69,11 +69,13 @@ class ObjectAttributes extends EventEmitter {
   }
 
   updateSrc = (rjvId, request) => {
-    const { name, namespace } = request
+    const { name } = request
     const newValue = request[NEW_VALUE_KEY]
     const variableRemoved = request[VARIABLE_REMOVED_KEY]
 
-    namespace.shift()
+    // drop the root name without mutating the caller's namespace prop
+    const namespace = request.namespace.slice(1)
+    request.namespace = namespace
 
     // deepy copy src
     const src = this.get(rjvId, 'global', 'src')
