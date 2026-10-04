@@ -75,6 +75,16 @@ describe('<Index />', function () {
     expect(wrapper.find('.data-type-label')).to.have.length(1)
   })
 
+  it('className is added to the container', function () {
+    const wrapper = mount(
+      <Index src={{ obj: { arr: [1] } }} className='my-viewer' />
+    )
+    const container = wrapper.find('.react-json-view').hostNodes()
+    expect(container).to.have.length(1)
+    expect(container.hasClass('my-viewer')).to.equal(true)
+    expect(wrapper.find('.my-viewer').hostNodes()).to.have.length(1)
+  })
+
   it('make sure copy to clipboard is displayed all properties', function () {
     const wrapper = render(
       <Index

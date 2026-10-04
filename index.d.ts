@@ -28,6 +28,11 @@ export interface ReactJsonViewProps {
    */
   style?: React.CSSProperties
   /**
+   * Additional class name for the react-json-view container.
+   * It is added next to the built-in "react-json-view" class.
+   */
+  className?: string
+  /**
    * Style of expand/collapse icons. Accepted values are "circle", triangle" or "square".
    *
    * Default: {}
