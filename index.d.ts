@@ -4,9 +4,9 @@ export interface ReactJsonViewProps {
   /**
    * This property contains your input JSON.
    *
-   * Required.
+   * Default: {}
    */
-  src: object
+  src?: object
   /**
    * Contains the name of your root node. Use null or false for no name.
    *

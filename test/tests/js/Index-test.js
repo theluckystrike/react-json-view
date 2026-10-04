@@ -75,6 +75,17 @@ describe('<Index />', function () {
     expect(wrapper.find('.data-type-label')).to.have.length(1)
   })
 
+  it('src undefined falls back to an empty object', function () {
+    const error = sinon.stub(console, 'error')
+    try {
+      const wrapper = render(<Index src={undefined} />)
+      expect(wrapper.find('.object-size').text()).to.equal('0 items')
+      expect(error.called).to.equal(false)
+    } finally {
+      error.restore()
+    }
+  })
+
   it('make sure copy to clipboard is displayed all properties', function () {
     const wrapper = render(
       <Index
